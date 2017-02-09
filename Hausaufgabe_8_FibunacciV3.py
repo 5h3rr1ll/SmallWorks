@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 def Fibo(n):
+    counter = 0
     if n == 0:
         return 0
     elif n == 1:
