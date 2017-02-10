@@ -9,5 +9,3 @@ def fak(n):
 
 def kehr(n):
     return 1.0 / n
-
-print(fak(5))
