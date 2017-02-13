@@ -8,26 +8,27 @@ class Konto(object):
         self.Kontostand = Kontostand
         self.MaxUmsatz = MaxUmsatz
         self.TagesUmsatz = TagesUmsatz
+        self.Beispiel = 230
 
-        print(Name, Kontostand, MaxUmsatz, TagesUmsatz)
-
-        return Name,Kontostand,Kontonummer,MaxUmsatz,TagesUmsatz
+        # return Name,Kontostand,Kontonummer,MaxUmsatz,TagesUmsatz
 
     def Einzahlung(self, Betrag):
-        Kontostand += Betrag
-        TagesUmsatz += Betrag
+        self.Kontostand += Betrag
+        self.TagesUmsatz += Betrag
 
     def Auszahlung(self, Betrag):
-        Kontostand -= Betrag
-        TagesUmsatz += Betrag
+        self.Kontostand -= Betrag
+        self.TagesUmsatz += Betrag
 
     def ZeigeKontostand(self):
-        print(Kontostand)
+        print(self.Kontostand, self.Beispiel)
 
 
 anthony = Konto("Anthony",123456)
 
 anthony.Einzahlung(1000)
-anthony.ZeigeKontostand
+anthony.ZeigeKontostand()
+anthony.NamensKonvention(12345)
 anthony.Auszahlung(100)
-anthony.ZeigeKontostand
+anthony.ZeigeKontostand()
+print(a)
