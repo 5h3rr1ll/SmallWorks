@@ -4,33 +4,42 @@
 class Konto(object):
     def __init__(self, Kontostand=0, MaxUmsatz=1500, TagesUmsatz=1500):
         self.Umsatz = 0
-        self.Name = Name
-        self.Kontonummer = Kontonummer
         self.Kontostand = Kontostand
         self.MaxUmsatz = MaxUmsatz
         self.TagesUmsatz = TagesUmsatz
         self.Beispiel = 230
 
-    def Einzahlung(self, Betrag):
+    def Einzahlung(self):
+        self.Betrag = int(input("Wie viel möchten Sie einzahlen? "))
         if self.Umsatz <= self.TagesUmsatz:
-            self.Kontostand += Betrag
-            self.TagesUmsatz += Betrag
+            self.Kontostand += self.Betrag
+            self.TagesUmsatz += self.Betrag
         else:
             Limit()
 
-    def Auszahlung(self, Betrag):
-        if self.Umsatz <= self.TagesUmsatz:
-            self.Kontostand -= Betrag
-            self.TagesUmsatz += Betrag
+    def Auszahlung(self, Betrag=0):
+        self.Betrag = int(input("Welchen Betrag möchten Sie abheben?: "))
+        if self.Umsatz <= self.TagesUmsatz and self.Kontostand > self.Betrag:
+            self.Kontostand -= self.Betrag
+            self.TagesUmsatz += self.Betrag
         else:
-            Limit()
+            self.Limit()
     def ZeigeKontostand(self):
-        print(self.Kontostand, self.Beispiel)
+        print(self.Kontostand)
 
-    def Ueberweisung(self, An, Betrag):
+    def Ueberweisung(self, An="MaxMustermann", Betrag=0):
+        self.An = input("Geben Sie den Namen des Empfängers an: ")
+        self.Betrag = int(input("Wie viel möchten Sie überweisen: "))
+        if self.Betrag < 0:
+            print("Es können nur positive Beträge überwiesen werden.")
+            self.Antwort = input("(N)euen Betrag eingeben oder (a)bbrechen - N / A: ")
+            if self.Antwort == "N":
+                return
+            else:
+                return Menue()
         if self.Umsatz <= self.TagesUmsatz:
-            self.Kontostand -= Betrag
-            print("Sie haben {}€ an {} überwiesen.".format(Betrag, An))
+            self.Kontostand -= self.Betrag
+            print("Sie haben {}€ an {} überwiesen.".format(self.Betrag, self.An))
             print("Ihr neuer Kontostand lautet {}€".format(self.Kontostand))
         else:
             Limit()
@@ -40,33 +49,56 @@ class Konto(object):
         print("Ihr Tagesumsatz ist auf {}€ begrenz".format(self.Tagesumsatz))
         print("Sie können heute noch einen Transaktion im Wert von {}€ ausführen".format(self.TagesUmsatz-self.Umsatz))
 
-    def KontoErstellen(self, Name=ḾaxMusermann, Kontonummer=123456):
+    # def KontoNr(self):
+    #     self.Kontonummer = 0
+    #     self.KontoNrLst = []
+
+    def KontoErstellen(self, Name="MaxMustermann", Kontonummer=0):
         self.Name = input("Geben Sie bitte Ihen Namen ein: ")
-        self.Kontonummer = int(input("Suchen Sie Sich eine Kontonummer aus und geben Sie ein: "))
+        self.Kontonummer = Kontonummer
+        # self.UserKontonummer = self.Kontonummer+1
+        # self.KontoNrLst.append(self.UserKontonummer)
+        # self.Kontonummer += 1
+        print("Es wurde ein Konto für {} erstellt, mit der Kontonummer {}".format(self.Name, self.Kontonummer)) #self.UserKontonummer))
 
+    def Exit(self):
+        return False
 
-Aktion = {1: KontoErstellen(); 2: Einzahlung(), 3: Auszahlung(), 4: ZeigeKontostand(), 5: Ueberweisung(), 6:  }
+def Menue():
+    konto = Konto()
 
-while True:
-    print("Was möchten Sie gerne Tun?:")
-    print("1: Konto erstellen")
-    print("2: Einzahlen")
-    print("3: Auszahlen")
-    print("4: Kontostandabfragen")
-    print("5: Eine Überweisung tätigen")
-    print("6: Beenden")
+    # Aktion = {1: "KontoErstellen()", 2: "Einzahlung()", 3: "Auszahlung()", 4: "ZeigeKontostand()", 5: "Ueberweisung()", 6:"Exit()"}
 
-    userInput = int(input())
-    if userInput == 1:
-        aktion[userInput]
-    elif userInput == 2:
-        Aktion[2]
-    elif userInput == 3:
-        Aktion[]
-anthony = Konto("Anthony",123456)
+    while True:
+        print("Was möchten Sie gerne Tun?:")
+        print("1: Konto erstellen")
+        print("2: Einzahlen")
+        print("3: Auszahlen")
+        print("4: Kontostandabfragen")
+        print("5: Eine Überweisung tätigen")
+        print("6: Beenden")
 
-anthony.Einzahlung(1000)
-anthony.ZeigeKontostand()
-anthony.Auszahlung(600)
-anthony.ZeigeKontostand()
-anthony.Ueberweisung("Meral",500)
+        userInput = int(input())
+
+        if userInput == 1:
+            konto.KontoErstellen()
+        elif userInput == 2:
+            konto.Einzahlung()
+        elif userInput == 3:
+            konto.Auszahlung()
+        elif userInput == 4:
+            konto.ZeigeKontostand()
+        elif userInput == 5:
+            konto.Ueberweisung()
+        elif userInput == 6:
+            konto.Exit()
+
+Menue()
+
+# anthony = Konto("Anthony",123456)
+#
+# anthony.Einzahlung(1000)
+# anthony.ZeigeKontostand()
+# anthony.Auszahlung(600)
+# anthony.ZeigeKontostand()
+# anthony.Ueberweisung("Meral",500)
