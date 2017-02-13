@@ -7,7 +7,6 @@ def Fibo(n):
     elif n == 1:
         return 1
     else:
-        print(n)
         return Fibo(n-1) + Fibo(n-2)
 
 print(Fibo(int(input("Die Summe nach dem wievielten Wachstumszyklus möchtest du wissen? "))))
