@@ -12,6 +12,7 @@ class Konto(object):
         self.KundenDic = {}
         self.File = "Kunde.txt"
         self.KundenDB = open(self.File, "r")
+        self.Kontonummer = 0
 
         for line in self.KundenDB:
             line = line.strip()
@@ -20,9 +21,33 @@ class Konto(object):
         self.KundenDB.close()
 
 
-    def KontoErstellen(self, Name="MaxMustermann"):
+    def OpenKtoNrDic(self):
+        self.KtoFile = "KtoLst.txt"
+        self.KtoNrFileObject = open(KtoFile)
+        self.KtoNrDic = {}
+
+        for line in self.KtoNrFileObject:
+            line = line.strip()
+            Eintrag = line.split(" ")
+            self.KtoNrDic[Eintrag[0]] = Eintrag[1]
+
+    def CheckKtoNr(self, Name, Kotonummer = None):
+        self.OpenKtoNrDic()
+        self.Name = Name
+        # self.KtoNrDicKeys = self.KtoNrDic.keys()
+
+        if self.Name not in self.KtoNrDic:
+            self.UserKontonummer = (self.Kontonummer + 1)
+            self.KontoErstellen(Namen, Kontonummer)
+             and self.Kontonummer != self.KtoNrDic[self.Name]:
+            self.KtoNrDic[self.Name] = self.Kontonummer+1
+        else:
+
+
+
+    def KontoErstellen(self, Name="MaxMustermann", Kotonummer):
         self.Name = input("Geben Sie bitte Ihen Namen ein: ")
-        self.Kontonummer = 1
+        self.Kontonummer = Kotonummer
         print("\nEs wurde ein Konto für {} erstellt, mit der Kontonummer {}\n".format(self.Name, self.Kontonummer))
         print("Der aktuelel Kontostand lautet: {}€\n".format(self.Kontostand))
         self.KundenDic["Name"] = self.Name
@@ -60,15 +85,12 @@ class Konto(object):
 
     def Ueberweisung(self, An="MaxMustermann", Betrag=0):
         self.An = input("Geben Sie den Namen des Empfängers an: ")
-        self.Betrag = int(input("Wie viel möchten Sie überweisen: \n"))
-        if self.Betrag > 0 and (self.Betrag + self.TagesUmsatz) < self.MaxTagesUms and self.Betrag > self.Kontostand:
+        self.Betrag = int(input("Wie viel möchten Sie überweisen: "))
+        if self.Betrag > 0 and (self.Betrag + self.TagesUmsatz) < self.MaxTagesUms:
             self.Kontostand -= self.Betrag
             self.TagesUmsatz += self.Betrag
             print("\nSie haben {}€ an {} überwiesen.".format(self.Betrag, self.An))
             print("Ihr neuer Kontostand lautet {}€\n".format(self.Kontostand))
-        elif self.Betrag > self.Kontostand:
-            print("Zu übeweisender Betrag größer als Guthaben!")
-            print("Max. überweisbarer Betrag {betrag}€.".format(betrag = self.Kontostand if (self.MaxTagesUms - self.TagesUmsatz) > self.Kontostand else (self.MaxTagesUms - self.TagesUmsatz)))
         elif (self.Betrag + self.TagesUmsatz) > self.MaxTagesUms:
             self.Limit()
         elif self.Betrag < 0:
@@ -90,7 +112,7 @@ class Konto(object):
         print(self.KundenDic)
 
     def Exit(self):
-        self.KundenDB = open("Kunde.txt", "w")
+        self.KundenDB = open(self.File, "w")
 
         for Eintrag in self.KundenDic:
             self.KundenDB.write("{0} {1}\n".format(Eintrag, self.KundenDic[Eintrag]))
@@ -132,3 +154,11 @@ def Menue():
             konto.Test()
 
 Menue()
+
+# anthony = Konto("Anthony",123456)
+#
+# anthony.Einzahlung(1000)
+# anthony.ZeigeKontostand()
+# anthony.Auszahlung(600)
+# anthony.ZeigeKontostand()
+# anthony.Ueberweisung("Meral",500)
