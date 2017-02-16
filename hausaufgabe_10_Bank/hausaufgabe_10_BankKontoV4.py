@@ -8,32 +8,38 @@ class Bank(object):
     def __init__(self):
         self.Bankname = "FairBank"
 
-        self.KontoNummernLstFile = open("KontoNummernLst.txt", "r+").readline()
-        for Entry in self.KontoNummernLstFile:
-            self.KontoNummernLst.append(Entry.strip(" "))
         self.KontoNummernLst = []
+        self.KontoNummernLstFile = open("KontoNummernLst.txt")
+        for Entry in self.KontoNummernLstFile:
+            self.KontoNummernLst.append(Entry.strip())
 
-        self.KontoNrKundenDicFile = open("KontoNrKundenDic.txt", "r+").readline()
-        for Entry in self.KontoNrKundenDicFile:
-            Entry = Entry.strip(" ")
-            self.KontoNrKundenDic[Entry[0]] = Entry[1]
+
         self.KontoNrKundenDic = {}
-
-        self.KundenLstFile = open("KundenLst.txt", "r+").readline()
-        for Entry in self.KundenLstFile:
-            Entry = Entry.strip(" ")
+        self.KontoNrKundenDicFile = open("KontoNrKundenDic.txt")
+        for Entry in self.KontoNrKundenDicFile:
+            Entry = Entry.strip()
+            Entry = Entry.split(" ")
             self.KontoNrKundenDic[Entry[0]] = Entry[1]
+
+
         self.KundenLst = []
-
-        self.KundenNameKundenNrDicFile = open("KundenNameKundenNrDic.txt", "r+").readline()
-        for Entry in self.KundenNameKundenNrDicFile:
-            Entry = Entry.strip(" ")
+        self.KundenLstFile = open("KundenLst.txt", "r+")
+        for Entry in self.KundenLstFile:
+            Entry = Entry.strip()
+            Entry = Entry.split(" ")
             self.KontoNrKundenDic[Entry[0]] = Entry[1]
+
+
         self.KundenNameKundenNrDic = {}
+        self.KundenNameKundenNrDicFile = open("KundenNameKundenNrDic.txt", "r+")
+        for Entry in self.KundenNameKundenNrDicFile:
+            Entry = Entry.strip()
+            Entry = Entry.split(" ")
+            self.KontoNrKundenDic[Entry[0]] = Entry[1]
 
 
     def KontoNummernAnzeigen(self):
-        print(self.KontonNummernLst)
+        print(self.KontoNummernLst)
 
     def KundenAnzeigen(self):
         print(self.KundenLst)
@@ -41,17 +47,17 @@ class Bank(object):
     def KundenMitKontoNummerAnzeigen(self):
         print(self.KontoNrKundenDic)
 
+    def KundenKontoAnpassen(self):
+        pass
+
     def KontoNummerGenerator(self):
-        self.NeueKontonummer = max(self.KontoNummernLst) + 1
+        self.max = max(self.KontoNummernLst)
+        self.NeueKontonummer = int(self.max + 1)
         self.KontoNummernLst.append(self.NeueKontonummer)
         return self.NeueKontonummer
 
 
-class Konto(Bank):
-
-    def __init__(self, Kontonummer = None, KontoBesitzer = None):
-        self.KontoNummern = Kontonummer
-        self.KontoBesitzer = KontoBesitzer
+class Konto(object):
 
     def KontentandAnzeigen(self):
         pass
@@ -71,21 +77,35 @@ class Konto(Bank):
     def Beenden():
         pass
 
-class Kunde(Konto):#Konto):
+class Kunde(object):
     pass
     # self.KundenNr = ""
     # self.KontoNummer = ""
 
-class BankMA(Konto):#Bank, Konto):
-    pass
-    # self.MANr = ""
-    # self.MAName = ""
+class BankMA(object):
 
-    def KundeAnlegen(self):
-        pass
+    def __init__(self):
+        self.bank = Bank()
 
-    def KontoErstellen(self):
-        pass
+    def KundeAnlegen(self, Vorname = "Max", Nachname = "Mustermann"):
+        Vorname = input("Vorname: ")
+        Nachname = input("Nachname: ")
+        self.KundeAnlegenFile = open("KundenVorNachName.txt", "a")
+        self.KundeAnlegenFile.write("{} {}\n".format(Vorname, Nachname))
+        self.KundeAnlegenFile.close()
+        return Vorname, Nachname
+
+
+    def KontoErstellen(self, Vorname = "Max", Nachname = "Mustermann", Kontonummer = 0, StarBetrag = 0, MaxTagesUms = 0):
+        Vorname = input("Vorname: ")
+        Nachemname = input("Nachname: ")
+        Kontonummer = self.bank.KontoNummerGenerator()
+        self.KundenFile = open(Vorname + Nachname + ".txt","a")
+        self.KundenFile.write("{} {} {} {}".format(Vorname, Nachname, StarBetrag, MaxTagesUms))
+        self.KundenFile.close()
+
+
+        # self.KDNeueKontonummer = self.Neue
 
     def KundenAufrufen(self):
         pass
@@ -100,7 +120,7 @@ class Menue(object):
     def Exit(self):
         exit(0)
 
-class KundenMenue(Kunde, Menue):
+class KundenMenue(Menue):
     def StartMenueKD(self):
         while True:
             print("1: Auszahlung")
@@ -109,7 +129,11 @@ class KundenMenue(Kunde, Menue):
             print("4: Ende")
 
 
-class BankMitarbeiterFrontEnd(BankMA, Menue):
+class BankMitarbeiterFrontEnd(Menue):
+    def __init__(self):
+        self.bankMA = BankMA()
+        self.StartMenueMA()
+
     def StartMenueMA(self):
         while True:
             print("1: Kunden anlegen")
@@ -118,8 +142,24 @@ class BankMitarbeiterFrontEnd(BankMA, Menue):
             print("4: Kunden-Konto anpassen")
             print("5: Kundensuche")
             print("6: Ende")
+            self.UserInput = int(input("Bitte treffen Sie Ihre Wahl: "))
 
-class BankFrontEnd(BankMA, Kunde, Menue):
+            if self.UserInput == 1:
+                self.bankMA.KundeAnlegen()
+
+            if self.UserInput == 2:
+                self.bankMA.KontoErstellen()
+
+            if self.UserInput == 6:
+                self.Exit()
+
+
+class BankFrontEnd(Menue):
+
+    def __init__(self):
+        self.bank = Bank()
+        self.StarteMenue()
+
     def StarteMenue(self):
         while True:
             print("1: Kontonummern Anzeigen")
@@ -132,9 +172,17 @@ class BankFrontEnd(BankMA, Kunde, Menue):
             self.UserInput = int(input())
 
             if self.UserInput == 1:
-                self.KontoNummernAnzeigen()
+                self.bank.KontoNummernAnzeigen()
+            if self.UserInput == 2:
+                self.KundenMitKontoNummerAnzeigen()
+            if self.UserInput == 3:
+                self.KundenMitKontoNummerAnzeigen()
+            if self.UserInput == 4:
+                self.KundenKontoAnpassen()
+            if self.UserInput == 5:
+                self.KundenKontoAnpassen()
             if self.UserInput == 6:
                 self.Exit()
 
-Bank = BankFrontEnd()
-Bank.StarteMenue()
+# Bank = BankFrontEnd()
+MA = BankMitarbeiterFrontEnd()

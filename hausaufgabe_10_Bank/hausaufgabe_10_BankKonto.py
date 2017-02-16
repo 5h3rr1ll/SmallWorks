@@ -61,16 +61,20 @@ class Konto(object):
     def Ueberweisung(self, An="MaxMustermann", Betrag=0):
         self.An = input("Geben Sie den Namen des Empfängers an: ")
         self.Betrag = int(input("Wie viel möchten Sie überweisen: \n"))
-        if self.Betrag > 0 and (self.Betrag + self.TagesUmsatz) < self.MaxTagesUms and self.Betrag > self.Kontostand:
+
+        if self.Betrag > 0 and (self.Betrag + self.TagesUmsatz) < self.MaxTagesUms and self.Betrag < self.Kontostand:
             self.Kontostand -= self.Betrag
             self.TagesUmsatz += self.Betrag
             print("\nSie haben {}€ an {} überwiesen.".format(self.Betrag, self.An))
             print("Ihr neuer Kontostand lautet {}€\n".format(self.Kontostand))
+
         elif self.Betrag > self.Kontostand:
             print("Zu übeweisender Betrag größer als Guthaben!")
             print("Max. überweisbarer Betrag {betrag}€.".format(betrag = self.Kontostand if (self.MaxTagesUms - self.TagesUmsatz) > self.Kontostand else (self.MaxTagesUms - self.TagesUmsatz)))
+
         elif (self.Betrag + self.TagesUmsatz) > self.MaxTagesUms:
             self.Limit()
+
         elif self.Betrag < 0:
             print("Es können nur positive Beträge überwiesen werden.")
             self.Antwort = input("(N)euen Betrag eingeben oder (a)bbrechen - N / A: ")
@@ -83,11 +87,11 @@ class Konto(object):
     def Limit(self):
         print("\nDie Aktion konnte leider nicht ausgeführt werden.")
         print("Ihr Tagesumsatz ist auf {}€ begrenz".format(self.MaxTagesUms))
-        print("Sie können heute noch einen Transaktion im Wert von {}€ ausführen.\n".format(self.MaxTagesUms - self.TagesUmsatz))
+        print("Sie können heute noch einen Transaktion im Wert von {}€ ausführen.\n".format(self.Kontostand if (self.MaxTagesUms - self.TagesUmsatz) > self.Kontostand else (self.MaxTagesUms - self.TagesUmsatz)))
 
 
     def Test(self):
-        print(self.KundenDic)
+        print(self.KundenDic, "MaxTagesUmsatz: ", self.MaxTagesUms, "TagesUmsatz: ", self.TagesUmsatz )
 
     def Exit(self):
         self.KundenDB = open("Kunde.txt", "w")
