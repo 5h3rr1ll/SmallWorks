@@ -1,0 +1,4 @@
+Name [Jens Jensen]
+Kontonummer 8
+StartBetrag 6090
+MaxTagesUms 1500

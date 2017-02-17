@@ -11,7 +11,8 @@ class Bank(object):
         self.KontoNummernLst = []
         self.KontoNummernLstFile = open("KontoNummernLst.txt")
         for Entry in self.KontoNummernLstFile:
-            self.KontoNummernLst.append(Entry.strip())
+            self.KontoNummernLst.append(int(Entry.strip()))
+        self.KontoNummernLstFile.close()
 
 
         self.KontoNrKundenDic = {}
@@ -54,6 +55,10 @@ class Bank(object):
         self.max = max(self.KontoNummernLst)
         self.NeueKontonummer = int(self.max + 1)
         self.KontoNummernLst.append(self.NeueKontonummer)
+        self.KontoNummernLstFile = open("KontoNummernLst.txt","a")
+        self.KontoNummernLstFile.write(str(self.NeueKontonummer))
+        self.KontoNummernLstFile.write("\n")
+        self.KontoNummernLstFile.close()
         return self.NeueKontonummer
 
 
@@ -96,14 +101,23 @@ class BankMA(object):
         return Vorname, Nachname
 
 
-    def KontoErstellen(self, Vorname = "Max", Nachname = "Mustermann", Kontonummer = 0, StarBetrag = 0, MaxTagesUms = 0):
+    def KontoErstellen(self, Vorname = "Max", Nachname = "Mustermann", Kontonummer = 0, StartBetrag = 0, MaxTagesUms = 1500):
         Vorname = input("Vorname: ")
-        Nachemname = input("Nachname: ")
+        Nachname = input("Nachname: ")
         Kontonummer = self.bank.KontoNummerGenerator()
+        print("Soll direkt Geld eingezahlt werden? J / N\n")
+        Antwort = input()
+        if Antwort in ["J","j","Ja","ja"]:
+            print("\nWie viel wird zur Eröffnung eingezahl?")
+            StartBetrag = int(input())
+        else:
+            StartBetrag = 0
+        self.UserMaxTagesUms = MaxTagesUms
         self.KundenFile = open(Vorname + Nachname + ".txt","a")
-        self.KundenFile.write("{} {} {} {}".format(Vorname, Nachname, StarBetrag, MaxTagesUms))
+        self.KundenFile.write("Name [{} {}]\nKontonummer {}\nStartBetrag {}\nMaxTagesUms {}".format(Vorname, Nachname, Kontonummer, StartBetrag, self.UserMaxTagesUms))
         self.KundenFile.close()
-
+        print("\nEs wurde ein Konto für {} {}, mit der Kontonummer {} und einer Einzahlung von {}€ angelegt.\n".format(Vorname, Nachname, Kontonummer, StartBetrag))
+        self.bank.KontoNrKundenDic[Kontonummer] = [Vorname, Nachname]
 
         # self.KDNeueKontonummer = self.Neue
 
