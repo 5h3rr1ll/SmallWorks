@@ -1,7 +1,0 @@
-Name [Anthony Sherrill]
-Kontonummer 7
-StartBetrag 10000
-MaxTagesUms 0Name [Anthony Sherrill]
-Kontonummer 9
-StartBetrag 10020
-MaxTagesUms 1500

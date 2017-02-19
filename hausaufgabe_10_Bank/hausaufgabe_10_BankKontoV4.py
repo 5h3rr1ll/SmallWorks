@@ -8,6 +8,10 @@ class Bank(object):
     def __init__(self):
         self.Bankname = "FairBank"
 
+        """Eine Liste mit allen Kontonummern, damit lediglich überprüft werden
+        kann, welche Kontonummern es bereits gibt. Außerdem wird aus dieser Liste
+        die größte vorhandene Kontonummer ermittelt, durch das erhöhen um 1 wird
+        eine neue Kontonummer generiert."""
         self.KontoNummernLst = []
         self.KontoNummernLstFile = open("KontoNummernLst.txt")
         for Entry in self.KontoNummernLstFile:
@@ -29,6 +33,7 @@ class Bank(object):
             Entry = Entry.strip()
             Entry = Entry.split(" ")
             self.KontoNrKundenDic[Entry[0]] = Entry[1]
+        self.KundenLstFile.close()
 
 
         self.KundenNameKundenNrDic = {}
@@ -113,7 +118,7 @@ class BankMA(object):
         else:
             StartBetrag = 0
         self.UserMaxTagesUms = MaxTagesUms
-        self.KundenFile = open(Vorname + Nachname + ".txt","a")
+        self.KundenFile = open("/konten/" + Vorname + Nachname + ".txt","a")
         self.KundenFile.write("Name [{} {}]\nKontonummer {}\nStartBetrag {}\nMaxTagesUms {}".format(Vorname, Nachname, Kontonummer, StartBetrag, self.UserMaxTagesUms))
         self.KundenFile.close()
         print("\nEs wurde ein Konto für {} {}, mit der Kontonummer {} und einer Einzahlung von {}€ angelegt.\n".format(Vorname, Nachname, Kontonummer, StartBetrag))
