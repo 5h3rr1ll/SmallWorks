@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from sys import exit
+from os import path
 
 class Bank(object):
 
@@ -118,18 +119,26 @@ class BankMA(object):
         else:
             StartBetrag = 0
         self.UserMaxTagesUms = MaxTagesUms
-        self.KundenFile = open("/konten/" + Vorname + Nachname + ".txt","a")
+        self.KundenFile = open("./konten/" + Vorname + Nachname + ".txt","a")
         self.KundenFile.write("Name [{} {}]\nKontonummer {}\nStartBetrag {}\nMaxTagesUms {}".format(Vorname, Nachname, Kontonummer, StartBetrag, self.UserMaxTagesUms))
         self.KundenFile.close()
         print("\nEs wurde ein Konto für {} {}, mit der Kontonummer {} und einer Einzahlung von {}€ angelegt.\n".format(Vorname, Nachname, Kontonummer, StartBetrag))
         self.bank.KontoNrKundenDic[Kontonummer] = [Vorname, Nachname]
 
-        # self.KDNeueKontonummer = self.Neue
-
-    def KundenAufrufen(self):
+    # Mit dieser Funktion soll das ein Konto, mit den Hinterlegten Informtionen
+    # eines Kunden aufgerufen werden.
+    def KundenAufrufen(self, Name, Nachname):
+        self.Name = input("Vorname des Kunden: ")
+        self.Nachname = input("Nachname des Kunden: ")
+        self.KundenFile = open(./konten/self.Name + Nachname + ".txt", "r+")
+        for Entry in self.KundenFile:
+            Entry = Entry.strip()
+            Entry = Entry
         pass
 
     def KundenSuche(self):
+        self.KundenName = input("Geben Sie bitte den Name des zu suchenden Kunden ein: ")
+        print(Kunden)
         pass
 
     def KundenKontoAnpassen(self):

@@ -1,0 +1,4 @@
+Name [Stephan Akkermann]
+Kontonummer 12
+StartBetrag 20000
+MaxTagesUms 1500
