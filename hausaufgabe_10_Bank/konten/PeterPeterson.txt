@@ -1,0 +1,4 @@
+Name [Peter Peterson]
+Kontonummer 13
+StartBetrag 12000
+MaxTagesUms 1500

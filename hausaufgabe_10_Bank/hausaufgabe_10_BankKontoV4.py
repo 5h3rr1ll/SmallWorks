@@ -33,7 +33,7 @@ class Bank(object):
         for Entry in self.KundenLstFile:
             Entry = Entry.strip()
             Entry = Entry.split(" ")
-            self.KontoNrKundenDic[Entry[0]] = Entry[1]
+            self.KundenLst.append("{} {}".format(Entry[0], Entry[1]))
         self.KundenLstFile.close()
 
 
@@ -42,7 +42,7 @@ class Bank(object):
         for Entry in self.KundenNameKundenNrDicFile:
             Entry = Entry.strip()
             Entry = Entry.split(" ")
-            self.KontoNrKundenDic[Entry[0]] = Entry[1]
+            self.KundenNameKundenNrDic[Entry[0]] = Entry[1]
 
 
     def KontoNummernAnzeigen(self):
@@ -97,6 +97,8 @@ class BankMA(object):
 
     def __init__(self):
         self.bank = Bank()
+        self.bank.KontoNrKundenDic()
+
 
     def KundeAnlegen(self, Vorname = "Max", Nachname = "Mustermann"):
         Vorname = input("Vorname: ")
@@ -130,11 +132,12 @@ class BankMA(object):
     def KundenAufrufen(self, Name, Nachname):
         self.Name = input("Vorname des Kunden: ")
         self.Nachname = input("Nachname des Kunden: ")
-        self.KundenFile = open(./konten/self.Name + Nachname + ".txt", "r+")
-        for Entry in self.KundenFile:
-            Entry = Entry.strip()
-            Entry = Entry
-        pass
+        if Kunde in KundenDic:
+            self.KundenFile = open("./konten/" + self.Name + self.Nachname + ".txt", "r+")
+        else:
+            print("Kunde nicht im System gefunden.")
+            return
+
 
     def KundenSuche(self):
         self.KundenName = input("Geben Sie bitte den Name des zu suchenden Kunden ein: ")
