@@ -56,7 +56,7 @@ class Bank(object):
         self.Nachname = Nachname
         self.Kto = Kto
         with open("KDNameKtoNrDic.txt","a") as self.KDNameKtoNrDicFile:
-            self.KDNameKtoNrDicFile.write("{} {}".format(self.Nachname, self.Kto))
+            self.KDNameKtoNrDicFile.write("{} {}\n".format(self.Nachname, self.Kto))
 
     def KundenMitKontoNummerAnzeigen(self):
         print(self.KDNameKtoNrDic)
