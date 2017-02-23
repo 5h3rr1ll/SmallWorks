@@ -1,0 +1,6 @@
+Name [Anthony Sherrill]
+Kontonummer 47
+Kontostand 22000
+MaxTagesUms 1500
+Erstellungsdatum(JJMMTT) 170223
+Let.Umsatz 0

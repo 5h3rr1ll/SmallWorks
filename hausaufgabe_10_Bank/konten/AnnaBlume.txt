@@ -1,0 +1,6 @@
+Name [Anna Blume]
+Kontonummer 48
+Kontostand 0
+MaxTagesUms 1500
+Erstellungsdatum(JJMMTT) 170223
+Let.Umsatz 0

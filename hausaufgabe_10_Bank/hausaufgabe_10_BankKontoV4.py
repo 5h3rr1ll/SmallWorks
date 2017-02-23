@@ -3,6 +3,7 @@
 
 from sys import exit
 from os import path
+import time
 
 class Bank(object):
 
@@ -20,12 +21,12 @@ class Bank(object):
         self.KontoNummernLstFile.close()
 
 
-        self.KontoNrKundenDic = {}
-        with open("KontoNrKundenDic.txt") as self.KontoNrKundenDicFile:
-            for Entry in self.KontoNrKundenDicFile:
-                Entry = Entry.strip()
-                Entry = Entry.split(" ")
-                self.KontoNrKundenDic[Entry[0]] = Entry[1]
+        # self.KDNameKtoNrDic = {}
+        # with open("KDNameKtoNrDic.txt") as self.KDNameKtoNrDicFile:
+        #     for Entry in self.KDNameKtoNrDicFile:
+        #         Entry = Entry.strip()
+        #         Entry = Entry.split(" ")
+        #         self.KDNameKtoNrDic[Entry[0]] = Entry[1]
 
 
         self.KundenLst = []
@@ -51,8 +52,14 @@ class Bank(object):
     def KundenAnzeigen(self):
         print(self.KundenLst)
 
+    def KDNameKtoNrSepeichern(self, Nachname, Kto):
+        self.Nachname = Nachname
+        self.Kto = Kto
+        with open("KDNameKtoNrDic.txt","a") as self.KDNameKtoNrDicFile:
+            self.KDNameKtoNrDicFile.write("{} {}".format(self.Nachname, self.Kto))
+
     def KundenMitKontoNummerAnzeigen(self):
-        print(self.KontoNrKundenDic)
+        print(self.KDNameKtoNrDic)
 
     def KundenKontoAnpassen(self):
         pass
@@ -70,7 +77,11 @@ class Bank(object):
 
 class Konto(object):
 
-    def KontentandAnzeigen(self):
+    def Zeitstempel(self):
+        self.datumHeute = int(time.strftime("%y%m%d"))
+        return self.datumHeute
+
+    def KontentandAnzeigen(self, Kontonummer):
         pass
 
     def Einzahulung(self):
@@ -89,15 +100,16 @@ class Konto(object):
         pass
 
 class Kunde(object):
-    pass
-    # self.KundenNr = ""
-    # self.KontoNummer = ""
+
+    def KontoAufrufen(self):
+        pass
 
 class BankMA(object):
 
     def __init__(self):
         self.bank = Bank()
-        self.bank.KontoNrKundenDic()
+        self.konto = Konto()
+        # self.bank.KDNameKtoNrDic()
 
 
     def KundeAnlegen(self, Vorname = "Max", Nachname = "Mustermann"):
@@ -109,38 +121,58 @@ class BankMA(object):
         return Vorname, Nachname
 
 
-    def KontoErstellen(self, Vorname = "Max", Nachname = "Mustermann", Kontonummer = 0, StartBetrag = 0, MaxTagesUms = 1500):
-        Vorname = input("Vorname: ")
-        Nachname = input("Nachname: ")
-        Kontonummer = self.bank.KontoNummerGenerator()
+    def KontoErstellen(self, Vorname = "Max", Nachname = "Mustermann",\
+                        Kontonummer = 0, Kontostand = 0, MaxTagesUms = 1500):
+        self.Vorname = input("Vorname: ")
+        self.Nachname = input("Nachname: ")
+        self.Kontonummer = self.bank.KontoNummerGenerator()
+        self.Kontostand = Kontostand
+        self.Erstellungsdatum = self.konto.Zeitstempel()
         print("Soll direkt Geld eingezahlt werden? J / N\n")
         Antwort = input()
         if Antwort in ["J","j","Ja","ja"]:
             print("\nWie viel wird zur Eröffnung eingezahl?")
-            StartBetrag = int(input())
+            self.Kontostand = int(input())
         else:
-            StartBetrag = 0
-        self.UserMaxTagesUms = MaxTagesUms
-        self.KundenFile = open("./konten/" + Vorname + Nachname + ".txt","a")
-        self.KundenFile.write("Name [{} {}]\nKontonummer {}\nStartBetrag {}\nMaxTagesUms {}".format(Vorname, Nachname, Kontonummer, StartBetrag, self.UserMaxTagesUms))
-        self.KundenFile.close()
-        print("\nEs wurde ein Konto für {} {}, mit der Kontonummer {} und einer Einzahlung von {}€ angelegt.\n".format(Vorname, Nachname, Kontonummer, StartBetrag))
-        self.bank.KontoNrKundenDic[Kontonummer] = [Vorname, Nachname]
+            self.Kontostand = 0
+        self.MaxTagesUms = MaxTagesUms
+        self.LetzterUms = 0
+        with open("./konten/" + self.Vorname + self.Nachname + ".txt","a") as KundenFile:
+            KundenFile.write("Name [{} {}]\nKontonummer {}\nKontostand"\
+            " {}\nMaxTagesUms {}\nErstellungsdatum(JJMMTT) {}\nLet.Umsatz {}".format(self.Vorname, \
+            self.Nachname, self.Kontonummer, self.Kontostand, self.MaxTagesUms,\
+            self.Erstellungsdatum, self.LetzterUms))
+
+        print("\nEs wurde ein Konto für {} {}, mit der Kontonummer {} und einer \
+Einzahlung von {}€ angelegt.\n".format(self.Vorname, self.Nachname, \
+                self.Kontonummer, self.Kontostand))
+
+        self.bank.KDNameKtoNrSepeichern(self.Nachname, self.Kontonummer)
+
 
     # Mit dieser Funktion soll das ein Konto, mit den Hinterlegten Informtionen
     # eines Kunden aufgerufen werden.
-    def KundenAufrufen(self, Name, Nachname):
-        with open(Name + Nachname + ".txt") as KDFile:
-            for line in KDFile:
-                print(line)
-        # self.Name = input("Vorname des Kunden: ")
-        # self.Nachname = input("Nachname des Kunden: ")
-        # if Kunde in KundenDic:
-        #     self.KundenFile = open("./konten/" + self.Name + self.Nachname + ".txt", "r+")
-        # else:
-        #     print("Kunde nicht im System gefunden.")
-        #     return
+    def KundenAufrufen(self, Name = "", Nachname = ""):
+        self.KDName = input("Vorname: ")
+        self.KDNachname = input("Nachname: ")
+        self.KDKontonummer = 0
+        self.KDKontostand = 0
+        self.KDTagesUmsMax = 0
+        self.TmpDic = {}
 
+        with open("./konten/" + self.KDName + self.KDNachname + ".txt") as KDFile:
+            for line in KDFile:
+                line = line.strip()
+                line = line.split(" ")
+                self.TmpDic[line[0]] = line[1]
+            self.KDKontonummer = self.TmpDic["Kontonummer"]
+            self.KDKontostand = self.TmpDic["Kontostand"]
+            self.KDTagesUmsMax = self.TmpDic["MaxTagesUms"]
+
+        print("\nName: {Vorname} {Nachname}\nKontonummer: {Kontonummer}\nKontostand:"\
+        " {Kontostand}\nMaxTagesUms: {MaxTagesUms}".format(Vorname = self.KDName,\
+        Nachname = self.KDNachname, Kontonummer = self.KDKontonummer, \
+        Kontostand = self.KDKontostand, MaxTagesUms = self.KDTagesUmsMax))
 
     def KundenSuche(self):
         self.KundenName = input("Geben Sie bitte den Name des zu suchenden Kunden ein: ")
@@ -172,13 +204,13 @@ class BankMitarbeiterFrontEnd(Menue):
         while True:
             print("1: Konto eröffnen")
             print("2: Kundenkonto laden")
-            print("4: Kunden-Konto anpassen")
-            print("5: Kundensuche")
+            # print("4: Kunden-Konto anpassen")
+            # print("5: Kundensuche")
             print("6: Ende")
             self.UserInput = int(input("Bitte treffen Sie Ihre Wahl: "))
 
             if self.UserInput == 1:
-                self.bankMA.KundeAnlegen()
+                self.bankMA.KontoErstellen()
 
             if self.UserInput == 2:
                 self.bankMA.KundenAufrufen()
@@ -197,9 +229,9 @@ class BankFrontEnd(Menue):
         while True:
             print("1: Kontonummern Anzeigen")
             print("2: Kunden Anzeigen")
-            print("3: Kunden mit Kontonummer anzeigen")
-            print("4: Kunden-Konto anpassen")
-            print("5: Kundensuche")
+            # print("3: Kunden mit Kontonummer anzeigen")
+            # print("4: Kunden-Konto anpassen")
+            # print("5: Kundensuche")
             print("6: Ende")
 
             self.UserInput = int(input())
