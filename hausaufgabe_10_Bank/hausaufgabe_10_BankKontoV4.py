@@ -21,11 +21,11 @@ class Bank(object):
 
 
         self.KontoNrKundenDic = {}
-        self.KontoNrKundenDicFile = open("KontoNrKundenDic.txt")
-        for Entry in self.KontoNrKundenDicFile:
-            Entry = Entry.strip()
-            Entry = Entry.split(" ")
-            self.KontoNrKundenDic[Entry[0]] = Entry[1]
+        with open("KontoNrKundenDic.txt") as self.KontoNrKundenDicFile:
+            for Entry in self.KontoNrKundenDicFile:
+                Entry = Entry.strip()
+                Entry = Entry.split(" ")
+                self.KontoNrKundenDic[Entry[0]] = Entry[1]
 
 
         self.KundenLst = []
@@ -130,13 +130,16 @@ class BankMA(object):
     # Mit dieser Funktion soll das ein Konto, mit den Hinterlegten Informtionen
     # eines Kunden aufgerufen werden.
     def KundenAufrufen(self, Name, Nachname):
-        self.Name = input("Vorname des Kunden: ")
-        self.Nachname = input("Nachname des Kunden: ")
-        if Kunde in KundenDic:
-            self.KundenFile = open("./konten/" + self.Name + self.Nachname + ".txt", "r+")
-        else:
-            print("Kunde nicht im System gefunden.")
-            return
+        with open(Name + Nachname + ".txt") as KDFile:
+            for line in KDFile:
+                print(line)
+        # self.Name = input("Vorname des Kunden: ")
+        # self.Nachname = input("Nachname des Kunden: ")
+        # if Kunde in KundenDic:
+        #     self.KundenFile = open("./konten/" + self.Name + self.Nachname + ".txt", "r+")
+        # else:
+        #     print("Kunde nicht im System gefunden.")
+        #     return
 
 
     def KundenSuche(self):
@@ -167,9 +170,8 @@ class BankMitarbeiterFrontEnd(Menue):
 
     def StartMenueMA(self):
         while True:
-            print("1: Kunden anlegen")
-            print("2: Konto eröffnen")
-            print("3: Kontoinformationen anzeigen")
+            print("1: Konto eröffnen")
+            print("2: Kundenkonto laden")
             print("4: Kunden-Konto anpassen")
             print("5: Kundensuche")
             print("6: Ende")
@@ -179,7 +181,7 @@ class BankMitarbeiterFrontEnd(Menue):
                 self.bankMA.KundeAnlegen()
 
             if self.UserInput == 2:
-                self.bankMA.KontoErstellen()
+                self.bankMA.KundenAufrufen()
 
             if self.UserInput == 6:
                 self.Exit()
@@ -205,13 +207,13 @@ class BankFrontEnd(Menue):
             if self.UserInput == 1:
                 self.bank.KontoNummernAnzeigen()
             if self.UserInput == 2:
-                self.KundenMitKontoNummerAnzeigen()
+                self.bank.KundenMitKontoNummerAnzeigen()
             if self.UserInput == 3:
-                self.KundenMitKontoNummerAnzeigen()
+                self.bank.KundenMitKontoNummerAnzeigen()
             if self.UserInput == 4:
-                self.KundenKontoAnpassen()
+                self.bank.KundenKontoAnpassen()
             if self.UserInput == 5:
-                self.KundenKontoAnpassen()
+                self.bank.KundenKontoAnpassen()
             if self.UserInput == 6:
                 self.Exit()
 
