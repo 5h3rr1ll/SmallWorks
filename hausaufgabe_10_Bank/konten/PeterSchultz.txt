@@ -1,0 +1,6 @@
+Name [Peter Schultz]
+Kontonummer 50
+Kontostand 1000
+MaxTagesUms 1500
+Erstellungsdatum(JJMMTT) 170308
+Let.Umsatz 0

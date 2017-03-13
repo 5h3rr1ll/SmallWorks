@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from sys import exit
-from os import path
+# from os import path
 import time
 
 class Bank(object):
